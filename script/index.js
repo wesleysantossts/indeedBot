@@ -1,12 +1,12 @@
-import puppeteer from 'puppeteer';
-import { JOB_KEYWORDS, JOB_KEYWORDS_EXCLUDE, JOB_SEARCH, PAGE_LIMIT, WEIRD_SITES } from './constants.js';
-import SearchText from './functions/searchText.js';
-import * as datefns from 'date-fns';
-import SaveJson from './utils/saveJson.js';
-import { sleep } from './utils/sleep.js';
+import puppeteer from "puppeteer";
+import { JOB_KEYWORDS, JOB_KEYWORDS_EXCLUDE, JOB_SEARCH, PAGE_LIMIT, WEIRD_SITES } from "./constants.js";
+import SearchText from "./functions/searchText.js";
+import * as datefns from "date-fns";
+import SaveJson from "./utils/saveJson.js";
+import { sleep } from "./utils/sleep.js";
 
 (async () => {
-  console.time('bot');
+  console.time("bot");
   const headless = false; // true = não mostrar navegador; false = mostrar navegador
   const browser = await puppeteer.launch({
     headless
@@ -58,7 +58,7 @@ import { sleep } from './utils/sleep.js';
         if (!keywordContains || siteNotAllowed.length > 0) continue;
         
         await title.click();
-        await sleep(2500);
+        await sleep(2300);
         const sidePane = await page.$(".jobsearch-RightPane");
         if (!sidePane) continue;
         
@@ -71,11 +71,11 @@ import { sleep } from './utils/sleep.js';
   
         if (applyButton) {
           obj.companyApplication = "indeed";
-          const href = await title.evaluate(item => item.getAttribute('href'));
+          const href = await title.evaluate(item => item.getAttribute("href"));
           obj.link = `https://br.indeed.com/${href}`
         } else {
           obj.companyApplication = site;
-          const href = await applyButtonWithExternalLink.evaluate(el => el.getAttribute('href'));
+          const href = await applyButtonWithExternalLink.evaluate(el => el.getAttribute("href"));
           obj.link = href 
         }
         
@@ -87,10 +87,10 @@ import { sleep } from './utils/sleep.js';
         await page.click(`nav > ul > li > a[data-testid="pagination-page-${i + 1}"]`);
       }
       console.log(`Busca: ${search} - Página ${i} concluída`);
-      if (i === PAGE_LIMIT) await sleep(2500)
+      if (i === PAGE_LIMIT) await sleep(2300);
     }
   
-    const hour = datefns.format(date, 'HH:mm');
+    const hour = datefns.format(date, "HH:mm");
     const normalized = {
       busca: search, 
       vagas: jobs.length, 
@@ -100,9 +100,9 @@ import { sleep } from './utils/sleep.js';
     jobsNormalized.push(normalized);
   }
     
-  const dateFormat = datefns.format(date, 'yyyyMMdd');
+  const dateFormat = datefns.format(date, "yyyyMMdd");
   await SaveJson.save(jobsNormalized, dateFormat);
 
-  console.timeEnd('bot');
+  console.timeEnd("bot");
   await browser.close();
 })();

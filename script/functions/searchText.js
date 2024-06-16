@@ -7,7 +7,7 @@ class SearchText {
 
     const jobDescription = await seletor.$("#jobDescriptionText");
     if (!jobDescription) return;
-    const arrText = (await jobDescription.evaluate(item => item.textContent)).split('\r\n');
+    const arrText = (await jobDescription.evaluate(item => item.textContent)).split("\r\n");
 
     for(const text of arrText) {
       const content = text.trim();
