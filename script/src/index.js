@@ -1,13 +1,14 @@
 import puppeteer from "puppeteer";
+import * as datefns from "date-fns";
+
 import { JOB_KEYWORDS, JOB_KEYWORDS_EXCLUDE, JOB_SEARCH, PAGE_LIMIT, WEIRD_SITES } from "./constants.js";
 import SearchText from "./functions/searchText.js";
-import * as datefns from "date-fns";
 import SaveJson from "./utils/saveJson.js";
 import { sleep } from "./utils/sleep.js";
 
 (async () => {
   console.time("bot");
-  const headless = false; // true = não mostrar navegador; false = mostrar navegador
+  const headless = false;
   const browser = await puppeteer.launch({
     headless
   });
@@ -21,7 +22,6 @@ import { sleep } from "./utils/sleep.js";
   
     const jobs = [];
   
-    // Validate search on Job Title
     for (let i = 1; i <= PAGE_LIMIT; i++) {
       if (i === 2 &&  (search === JOB_SEARCH[0])) {
         await page.waitForSelector('button[aria-label="fechar"]', 350);
@@ -62,7 +62,6 @@ import { sleep } from "./utils/sleep.js";
         const sidePane = await page.$(".jobsearch-RightPane");
         if (!sidePane) continue;
         
-        // Algoritmo texto
         const shouldApply = await SearchText.search(sidePane);
         if (!shouldApply) continue;
   

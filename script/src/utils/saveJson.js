@@ -3,8 +3,7 @@ import path from "path";
 
 class SaveJson {
   static async save(newData, filename) {
-    const pathFormat = path.resolve("data", `${filename}.json`)
-    // Verificar se o arquivo JSON já existe
+    const pathFormat = path.resolve("..", "data", `${filename}.json`)
     if (fs.existsSync(pathFormat)) {
       fs.readFile(pathFormat, "utf8", (err, data) => {
         if (err) {
